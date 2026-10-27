@@ -2,7 +2,7 @@
 
 user_id=$(id -u)
 logs_folder="/var/log/shell-practice"
-logs_file="$logs_folder/$0.log"
+logs_file="${logs_folder}/$0.log"
 R="\e[31m"
 G="\e[32m"
 Y="\e[33m"
@@ -29,7 +29,7 @@ validate(){
 
 for package in $@
 do
-   dnf installed ${package} &>> $logs_file
+   dnf list installed ${package} &>> $logs_file
    if [ $? -ne  0 ];
     then
      dnf install ${package} -y &>> $logs_file
