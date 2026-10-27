@@ -24,7 +24,7 @@ validate(){
 }
 
 
-dnf install nginx
+dnf install nginx -y
 validate $? "nginx installation"
 
 
