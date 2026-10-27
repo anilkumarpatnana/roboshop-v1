@@ -2,11 +2,13 @@
 
 user_id=$(id -u)
 logs_folder="/var/log/shell-practice/"
-logs_file="$logs_folder/$@.log"
+logs_file="$logs_folder/$0.log"
 R="\e[31m"
 G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
+
+mkdir -p $logs_folder &>> $logs_file
 
 if [ $user_id -eq  0 ];
  then
