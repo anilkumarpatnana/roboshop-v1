@@ -13,15 +13,15 @@ fi
 validate(){
     if [ $1 -eq 0 ];
     then
-    echo "$2 installed successfully"
+    echo "$2 .....Success"
     else
-    echo "$2 installation failed"
+    echo "$2 .....failed"
     fi
 }
 
 
-dnf install nginxx
-validate $? "Nginx"
+dnf install $1
+validate $? ""$1"-Installation"
 
 
 
