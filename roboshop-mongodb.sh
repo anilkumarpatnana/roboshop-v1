@@ -10,7 +10,7 @@ if [ $user_id -eq  0 ];
  exit 1
 fi
 
-valiadate(){
+validate(){
     if [ $1 -eq 0 ];
     then
     echo "$2 installed successfully"
