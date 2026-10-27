@@ -8,9 +8,9 @@ G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
 
-mkdir -p $logs_folder &>> $logs_file
+mkdir -p $logs_folder
 
-touch $logs_file &>> $logs_file
+
 
 if [ $user_id -eq  0 ];
  then
