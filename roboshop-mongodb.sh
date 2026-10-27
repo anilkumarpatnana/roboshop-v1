@@ -1,31 +1,40 @@
 #!/bin/bash
 
 user_id=$(id -u)
+logs_folder="/var/log/shell-practice/"
+logs_file="$logs_folder/$@.log"
 R="\e[31m"
 G="\e[32m"
 Y="\e[33m"
-NC="\e[0m"
+N="\e[0m"
 
 if [ $user_id -eq  0 ];
  then
- echo "Thanks for executing file with sudo access"
+ echo "Thanks for executing file with sudo access" &>> $logs_file
  else
- echo "Please execute file with sudo access"
+ echo "Please execute file with sudo access" &>> $logs_file
  exit 1
 fi
 
 validate(){
     if [ $1 -eq 0 ];
     then
-    echo -e "$2 .....${R}Success"
+    echo -e "$2 .....${G}Success${N}" &>> $logs_file
     else
-    echo -e "$2 .....${R}failed"
+    echo -e "$2 .....${R}failed${N}" &>> $logs_file
     fi
 }
 
-
-dnf install nginx -y
-validate $? "nginx installation"
+for package in $@
+do
+   dnf installed $@ &>> $logs_file
+   if [ $? -ne  0 ];
+    then
+     dnf install $@ -y &>> $logs_file
+     validate $? "$@ installed ${G}successfully${N}" &>> $logs_file
+    else
+     echo "$@ already installed...${Y}SKIPPING${N}" &>> $logs_file
+done
 
 
 
