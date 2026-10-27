@@ -36,6 +36,7 @@ do
     then
      dnf install ${package} -y &>> $logs_file
      validate $? "Installing ${package}" | tee -a  $logs_file
+     echo -e  "${package} installed ${G}successfully${N}" | tee -a  $logs_file
     else
      echo -e  "${package} already installed...${Y}SKIPPING${N}" | tee -a  $logs_file
    fi  
