@@ -12,11 +12,9 @@ mkdir -p $logs_folder
 
 
 
-if [ $user_id -eq  0 ];
+if [ $user_id -ne  0 ];
  then
- echo "Thanks for executing file with sudo access" &>> $logs_file
- else
- echo "Please execute file with sudo access" &>> $logs_file
+ echo "Please  executing file with sudo access"
  exit 1
 fi
 
@@ -34,9 +32,9 @@ do
    dnf list installed ${package} &>> $logs_file
    if [ $? -ne  0 ];
     then
-    echo "Going to install : ${package}" &>> $logs_file
+    echo "Going to install : ${package}" | tee -a  $logs_file
      dnf install ${package} -y &>> $logs_file
-     validate $? "Installing ${package}" | tee -a  $logs_file
+     validate $? "Installing ${package}" &>> $logs_file
     else
      echo -e  "${package} already installed...${Y}SKIPPING${N}" | tee -a  $logs_file
    fi  
