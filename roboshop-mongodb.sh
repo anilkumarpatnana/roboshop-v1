@@ -1,6 +1,10 @@
 #!/bin/bash
 
 user_id=$(id -u)
+R="\e[31m"
+G="\e[32m"
+Y="\e[33m"
+NC="\e[0m"
 
 if [ $user_id -eq  0 ];
  then
@@ -13,15 +17,15 @@ fi
 validate(){
     if [ $1 -eq 0 ];
     then
-    echo "$2 .....Success"
+    echo "$2 .....${G}Success"
     else
-    echo "$2 .....failed"
+    echo "$2 .....$(R)failed"
     fi
 }
 
 
-dnf install $1
-validate $? ""$1"-Installation"
+dnf install nginx
+validate $? "nginx installation"
 
 
 
