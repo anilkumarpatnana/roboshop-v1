@@ -28,23 +28,26 @@ validate(){
 }
 
 
-for package in "$@"
-do
-    if dnf list installed "$package" &>> "$logs_file"; then
-        echo -e "${package} already installed...${Y}SKIPPING${N}" | tee -a "$logs_file"
+cp mongo.repo /etc/yum.repos.d/mongo.repo
+validate $? "mongo repo adding"
 
-    elif dnf list available "$package" &>> "$logs_file"; then
-        echo "Going to install: ${package}" | tee -a "$logs_file"
+dnf install mongodb-org -y             &>> $logs_file
+validate $? "installing mongodb... "
 
-        dnf install "$package" -y &>> "$logs_file"
-        validate $? "Installing ${package}"
+systemctl enable mongod                 &>> $logs_file
+validate $? "enabling mongodb service..."
+ 
+systemctl start mongod                  &>> $logs_file
+validate $? "starting mongodb service..."
 
-    else
-        echo -e "${package} not available in repositories...${R}FAILED${N}" | tee -a "$logs_file"
-        exit 1
-    fi
-done
+sed -i 's/127.0.0.1/0.0.0.0/' /etc/mongod.conf
+validate $? "allowing listening from 0.0.0.0"
 
+systemctl restart mongod                 &>> $logs_file
+validate $? "restarting mongodb service..."
+
+systemctl status mongod                   &>> $logs_file
+validate $? "checking status of mongodb service..."
 
 
 
