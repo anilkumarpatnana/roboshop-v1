@@ -36,6 +36,7 @@ do
      validate $? "${package} installed ${G}successfully${N}" &>> $logs_file
     else
      echo "${package} already installed...${Y}SKIPPING${N}" &>> $logs_file
+   fi  
 done
 
 
