@@ -10,6 +10,8 @@ N="\e[0m"
 
 mkdir -p $logs_folder &>> $logs_file
 
+touch $logs_file &>> $logs_file
+
 if [ $user_id -eq  0 ];
  then
  echo "Thanks for executing file with sudo access" &>> $logs_file
