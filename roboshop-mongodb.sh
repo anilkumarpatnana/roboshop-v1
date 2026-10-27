@@ -2,7 +2,7 @@
 
 user_id=$(id -u)
 
-if [ $user_id -et 0 ];
+if [ $user_id -eq  0 ];
 then
  echo "Thanks for executing file with sudo access"
  else
