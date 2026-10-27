@@ -10,7 +10,7 @@ N="\e[0m"
 
 mkdir -p $logs_folder
 
-
+echo "Script started execution at $(date +"%F %T")" &>> $logs_file
 
 if [ $user_id -ne  0 ];
  then
