@@ -35,9 +35,9 @@ do
    if [ $? -ne  0 ];
     then
      dnf install ${package} -y &>> $logs_file
-     validate $? "${package} installed ${G}successfully${N}" &>> $logs_file
+     validate $? "${package} installed ${G}successfully${N}" | tee -a  $logs_file
     else
-     echo "${package} already installed...${Y}SKIPPING${N}" &>> $logs_file
+     echo "${package} already installed...${Y}SKIPPING${N}" | tee -a  $logs_file
    fi  
 done
 
