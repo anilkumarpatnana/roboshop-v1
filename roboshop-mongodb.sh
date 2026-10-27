@@ -34,6 +34,7 @@ do
    dnf list installed ${package} &>> $logs_file
    if [ $? -ne  0 ];
     then
+    echo "Going to install : ${package}" &>> $logs_file
      dnf install ${package} -y &>> $logs_file
      validate $? "Installing ${package}" | tee -a  $logs_file
     else
