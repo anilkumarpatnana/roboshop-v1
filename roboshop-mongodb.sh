@@ -27,18 +27,24 @@ validate(){
     fi
 }
 
-for package in $@
+
+for package in "$@"
 do
-   dnf list installed ${package} &>> $logs_file
-   if [ $? -ne  0 ];
-    then
-    echo "Going to install : ${package}" | tee -a  $logs_file
-     dnf install ${package} -y &>> $logs_file
-     validate $? "Installing ${package}" &>> $logs_file
+    if dnf list installed "$package" &>> "$logs_file"; then
+        echo -e "${package} already installed...${Y}SKIPPING${N}" | tee -a "$logs_file"
+
+    elif dnf list available "$package" &>> "$logs_file"; then
+        echo "Going to install: ${package}" | tee -a "$logs_file"
+
+        dnf install "$package" -y &>> "$logs_file"
+        validate $? "Installing ${package}"
+
     else
-     echo -e  "${package} already installed...${Y}SKIPPING${N}" | tee -a  $logs_file
-   fi  
+        echo -e "${package} not available in repositories...${R}FAILED${N}" | tee -a "$logs_file"
+        exit 1
+    fi
 done
+
 
 
 
