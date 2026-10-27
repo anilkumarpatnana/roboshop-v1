@@ -17,7 +17,7 @@ fi
 validate(){
     if [ $1 -eq 0 ];
     then
-    echo "$2 .....${G}Success"
+    echo "$2 .....$(G)Success"
     else
     echo "$2 .....$(R)failed"
     fi
