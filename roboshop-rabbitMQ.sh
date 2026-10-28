@@ -33,8 +33,8 @@ timestamp(){
 
 echo "$(timestamp)  [INFO]  ========== Script started execution==========>"| tee -a  $logs_file
 
-cp rabbitmq.repo /etc/yum.repos.d/rabbitmq.repo $logs_file
-validate $? "Adding rabbitmq reo file to yum.repos.d" | tee -a  $logs_file
+cp rabbitmq.repo /etc/yum.repos.d/ $logs_file
+validate $? "Adding rabbitmq repo file to yum.repos.d" | tee -a  $logs_file
 
 dnf install erlang rabbitmq-server -y $logs_file
 validate $? "Installing rabbitmq-server" | tee -a  $logs_file
