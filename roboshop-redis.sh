@@ -1,0 +1,57 @@
+#!/bin/bash
+
+user_id=$(id -u)
+logs_folder="/var/log/shell-practice"
+logs_file="${logs_folder}/$0.log"
+R="\e[31m"
+G="\e[32m"
+Y="\e[33m"
+N="\e[0m"
+
+mkdir -p $logs_folder
+
+echo "Script started execution at $(date +"%F %T")" &>> $logs_file
+
+if [ $user_id -ne  0 ];
+ then
+ echo "Please  executing file with sudo access"
+ exit 1
+fi
+
+validate(){
+    if [ $1 -eq 0 ];
+    then
+    echo -e "$2 .....${G}Success${N}"| tee -a  $logs_file
+    else
+    echo -e "$2 .....${R}failed${N}" | tee -a  $logs_file
+    fi
+}
+
+dnf module disable redis -y
+validate $? "redis default module disabling" | tee -a  $logs_file
+
+dnf module enable redis:7 -y
+validate $? "enabling redis module " | tee -a  $logs_file
+
+dnf install redis -y
+validate $? "redis installation" | tee -a  $logs_file
+
+sed -i -e 's/^bind 127.0.0.1/bind 0.0.0.0/' -e 's/^protected-mode yes/protected-mode no/' /etc/redis/redis.conf
+validate $? "enabled redis to listen from all addresses and updated protected mode to NO" | tee -a  $logs_file
+
+systemctl enable redis
+systemctl start redis
+validate $? "Starting and enabling redis" | tee -a  $logs_file
+
+systemctl status redis
+validate $? "redis service running" | tee -a  $logs_file
+
+ss -lntp | grep 6379
+validate $? "redis is listening on port 27017" | tee -a  $logs_file
+
+redis-cli ping
+validate $? "redis-cli responding" | tee -a  $logs_file
+
+
+
+
