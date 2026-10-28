@@ -28,13 +28,13 @@ validate(){
 }
 
 dnf module disable redis -y &>> $logs_file
-validate $? "redis default module disabling" &>> $logs_file
+validate $? "redis default module disabling" | tee -a  $logs_file
 
 dnf module enable redis:7 -y &>> $logs_file
-validate $? "enabling redis module " &>> $logs_file
+validate $? "enabling redis module " | tee -a  $logs_file
 
 dnf install redis -y &>> $logs_file
-validate $? "redis installation" &>> $logs_file
+validate $? "redis installation" | tee -a  $logs_file
 
 sed -i -e 's/^bind 127.0.0.1/bind 0.0.0.0/' -e 's/^protected-mode yes/protected-mode no/' /etc/redis/redis.conf &>> $logs_file
 validate $? "enabled redis to listen from all addresses and updated protected mode to NO" | tee -a  $logs_file
