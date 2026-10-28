@@ -45,8 +45,13 @@ validate $? "Enabling rabbitmq-server service" | tee -a  $logs_file
 systemctl start rabbitmq-server  &>> $logs_file
 validate $? "Starting rabbitmq-server service" | tee -a  $logs_file
 
-rabbitmqctl add_user roboshop roboshop123  &>> $logs_file
-validate $? "Creating rabbitmq user for RoboShop" | tee -a  $logs_file
+
+if sudo rabbitmqctl list_users | grep -q '^roboshop[[:space:]]'; then
+    echo "Roboshop user already exists"
+else
+    sudo rabbitmqctl add_user roboshop roboshop123 &>> "$logs_file"
+    validate $? "Creating RabbitMQ user for RoboShop" | tee -a "$logs_file"
+fi
 
 rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"  &>> $logs_file
 validate $? "Providing permission for user roboshop configure, read, write permission" | tee -a  $logs_file
