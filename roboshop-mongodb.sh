@@ -27,27 +27,30 @@ validate(){
     fi
 }
 
+echo "$(timestamp)  [INFO]  ========== Script started execution==========>" | tee -a  $logs_file
 
-cp mongo.repo /etc/yum.repos.d/mongo.repo
-validate $? "mongo repo adding"
+cp mongo.repo /etc/yum.repos.d/mongo.repo &>> $logs_file
+validate $? "mongo repo adding" | tee -a  $logs_file
 
 dnf install mongodb-org -y             &>> $logs_file
-validate $? "installing mongodb... "
+validate $? "installing mongodb... " | tee -a  $logs_file
 
 systemctl enable mongod                 &>> $logs_file
-validate $? "enabling mongodb service..."
+validate $? "enabling mongodb service..." | tee -a  $logs_file
  
 systemctl start mongod                  &>> $logs_file
-validate $? "starting mongodb service..."
+validate $? "starting mongodb service..." | tee -a  $logs_file
 
 sed -i 's/127.0.0.1/0.0.0.0/' /etc/mongod.conf
-validate $? "allowing listening from 0.0.0.0"
+validate $? "allowing listening from 0.0.0.0" | tee -a  $logs_file
 
 systemctl restart mongod                 &>> $logs_file
-validate $? "restarting mongodb service..."
+validate $? "restarting mongodb service..." | tee -a  $logs_file
 
 systemctl status mongod                   &>> $logs_file
-validate $? "checking status of mongodb service..."
+validate $? "checking status of mongodb service..." | tee -a  $logs_file
 
 
+echo "$(timestamp)  [INFO] Time taken  $SECONDS" | tee -a  $logs_file
 
+echo "$(timestamp)  [INFO]  ========== Script execution completed ==========>" | tee -a  $logs_file

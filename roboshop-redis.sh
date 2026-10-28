@@ -27,6 +27,12 @@ validate(){
     fi
 }
 
+timestamp(){
+    date " +%F %T "
+}
+
+echo "$(timestamp)  [INFO]  ========== Script started execution==========>"| tee -a  $logs_file
+
 dnf module disable redis -y &>> $logs_file
 validate $? "redis default module disabling" | tee -a  $logs_file
 
@@ -52,6 +58,7 @@ validate $? "redis is listening on port 6379" | tee -a  $logs_file
 redis-cli ping &>> $logs_file
 validate $? "redis-cli responding" | tee -a  $logs_file
 
+echo "$(timestamp)  [INFO] Time taken  $SECONDS" | tee -a  $logs_file
 
-
+echo "$(timestamp)  [INFO]  ========== Script execution completed ==========>" | tee -a  $logs_file
 
