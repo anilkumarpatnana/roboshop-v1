@@ -33,28 +33,28 @@ timestamp(){
 
 echo "$(timestamp)  [INFO]  ========== Script started execution==========>"| tee -a  $logs_file
 
-cp rabbitmq.repo /etc/yum.repos.d/ $logs_file
+cp rabbitmq.repo /etc/yum.repos.d/  &>> $logs_file
 validate $? "Adding rabbitmq repo file to yum.repos.d" | tee -a  $logs_file
 
-dnf install erlang rabbitmq-server -y $logs_file
+dnf install erlang rabbitmq-server -y  &>> $logs_file
 validate $? "Installing rabbitmq-server" | tee -a  $logs_file
 
-systemctl enable rabbitmq-server $logs_file
+systemctl enable rabbitmq-server  &>> $logs_file
 validate $? "Enabling rabbitmq-server service" | tee -a  $logs_file
 
-systemctl start rabbitmq-server $logs_file
+systemctl start rabbitmq-server  &>> $logs_file
 validate $? "Starting rabbitmq-server service" | tee -a  $logs_file
 
-rabbitmqctl add_user roboshop roboshop123 $logs_file
+rabbitmqctl add_user roboshop roboshop123  &>> $logs_file
 validate $? "Creating rabbitmq user for RoboShop" | tee -a  $logs_file
 
-rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*" $logs_file
+rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"  &>> $logs_file
 validate $? "Providing permission for user roboshop configure, read, write permission" | tee -a  $logs_file
 
 systemctl status rabbitmq-server &>> $logs_file
 validate $? "rabbitmq service is running " | tee -a  $logs_file
 
-ss -lntp | grep 5672
+ss -lntp | grep 5672  &>> $logs_file
 validate $? "rabbitmq listening on port no 5672" | tee -a  $logs_file
 
 rabbitmq-plugins enable rabbitmq_management &>> $logs_file
