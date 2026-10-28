@@ -27,6 +27,10 @@ validate(){
     fi
 }
 
+timestamp(){
+    date "+%F %T"
+}
+
 echo "$(timestamp)  [INFO]  ========== Script started execution==========>" | tee -a  $logs_file
 
 cp mongo.repo /etc/yum.repos.d/mongo.repo &>> $logs_file
