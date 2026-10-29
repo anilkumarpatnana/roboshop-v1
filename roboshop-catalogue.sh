@@ -50,7 +50,7 @@ grep -q "^roboshop:" /etc/passwd
 
 if [ $? -eq 0 ];
 then
-    echo "Roboshop User Already Created ....${Y}SKIPPING${N}"
+    echo -e "Roboshop User Already Created ....${Y}SKIPPING${N}"
 else
 useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>> $logs_file
 validate $? "Creating roboshop user for running application " | tee -a  $logs_file
@@ -91,18 +91,17 @@ cp mongo.repo /etc/yum.repos.d/mongo.repo
 validate $? "Copying mongo repo to /etc/yum.repos.d/mongo.repo for installing mongo-client  " | tee -a  $logs_file
 
 
-dnf install mongodb-mongosh -y
+dnf install mongodb-mongosh -y &>> $logs_file
 validate $? "Installing mongodb-mongosh client for loading data " | tee -a  $logs_file
 
 
+product_count=$(mongosh --host mongodb.roboshop.anilkumarpatnana.online --quiet --eval 'db.getSiblingDB("catalogue").products.countDocuments()')
 
-if [ "$(mongosh --host mongodb.roboshop.anilkumarpatnana.online --quiet --eval 'db.getSiblingDB("catalogue").products.countDocuments()')" -eq 11 ];
-then
-    echo -e "Products data already added to MongoDB using mongo client ....${Y}SKIPPING${N}" | tee -a "$logs_file"
+if [ "$product_count" -ne 0 ]; then
+    echo -e "Products data already added to MongoDB ....${Y}SKIPPING${N}" | tee -a "$logs_file"
 else
     mongosh --host mongodb.roboshop.anilkumarpatnana.online < /app/db/master-data.js
-    validate $? "Loading products data to mongodb using mongo client is  " | tee -a  $logs_file
-
+    validate $? "Loading products data to MongoDB" | tee -a "$logs_file"
 fi
 
 
