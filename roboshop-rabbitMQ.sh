@@ -7,6 +7,8 @@ R="\e[31m"
 G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
+C="\e[1;36m"
+
 
 mkdir -p $logs_folder
 
@@ -31,7 +33,7 @@ timestamp(){
     date "+%F %T"
 }
 
-echo "$(timestamp)  [INFO]  ========== Script started execution==========>"| tee -a  $logs_file
+echo -e "$(timestamp)  [INFO]  ${R}========== ${C}Script Execution Started${R} ==========>${N}" | tee -a  $logs_file
 
 cp rabbitmq.repo /etc/yum.repos.d/  &>> $logs_file
 validate $? "Adding rabbitmq repo file to yum.repos.d" | tee -a  $logs_file
@@ -70,4 +72,4 @@ rabbitmqctl set_user_tags roboshop administrator &>> $logs_file
 
 echo "$(timestamp)  [INFO] Time taken  $SECONDS" | tee -a  $logs_file
 
-echo "$(timestamp)  [INFO]  ========== Script execution completed ==========>" | tee -a  $logs_file
+echo -e "$(timestamp)  [INFO]  ${R}========== ${C}Script Execution Completed${R} ==========>${N}" | tee -a  $logs_file

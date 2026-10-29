@@ -32,7 +32,7 @@ timestamp(){
     date "+%F %T"
 }
 
-echo -e "$(timestamp)  [INFO]  ========== ${C}Script Execution started${N} ==========>"| tee -a  $logs_file
+echo -e "$(timestamp)  [INFO]  ${R}========== ${C}Script Execution Started${R} ==========>${N}" | tee -a  $logs_file
 
 dnf module disable nodejs -y &>> $logs_file
 validate $? "Disabling nodejs default module " | tee -a  $logs_file

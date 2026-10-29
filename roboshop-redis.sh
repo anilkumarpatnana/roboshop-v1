@@ -7,6 +7,7 @@ R="\e[31m"
 G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
+C="\e[1;36m"
 
 mkdir -p $logs_folder
 
@@ -31,7 +32,7 @@ timestamp(){
     date "+%F %T"
 }
 
-echo "$(timestamp)  [INFO]  ========== Script started execution==========>"| tee -a  $logs_file
+echo -e "$(timestamp)  [INFO]  ${R}========== ${C}Script Execution Started${R} ==========>${N}" | tee -a  $logs_file
 
 dnf module disable redis -y &>> $logs_file
 validate $? "redis default module disabling" | tee -a  $logs_file
@@ -60,5 +61,5 @@ validate $? "redis-cli responding" | tee -a  $logs_file
 
 echo "$(timestamp)  [INFO] Time taken  $SECONDS" | tee -a  $logs_file
 
-echo "$(timestamp)  [INFO]  ========== Script execution completed ==========>" | tee -a  $logs_file
+echo -e "$(timestamp)  [INFO]  ${R}========== ${C}Script Execution Completed${R} ==========>${N}" | tee -a  $logs_file
 
