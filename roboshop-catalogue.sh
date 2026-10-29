@@ -65,11 +65,7 @@ validate $? "Downloading application code to tmp directory " | tee -a  $logs_fil
 cd /app &>> $logs_file
 validate $? "Moving to app directory " | tee -a  $logs_file
 
-rm -rf /app/* &>> $logs_file
-validate $? "Deleting all data inside /app  " | tee -a  $logs_file
-
-
-unzip /tmp/catalogue.zip -y &>> $logs_file
+unzip -o /tmp/catalogue.zip -d /app &>> "$logs_file"
 validate $? "unzipping application code from tmp to app directoy " | tee -a  $logs_file
 
 cd /app
