@@ -46,7 +46,9 @@ validate $? "Installing nodejs " | tee -a  $logs_file
 node -v | tee -a  $logs_file
 validate $? "Checking nodejs version is " | tee -a  $logs_file
 
-if [ $(cat /etc/passwd | grep "roboshop") -eq 0 ];
+grep -q "^roboshop:" /etc/passwd
+
+if [ $? -eq 0 ];
 then
     echo "Roboshop User Already Created ....${Y}SKIPPING${N}"
 else
