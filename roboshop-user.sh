@@ -7,6 +7,7 @@ R="\e[31m"
 G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
+C="\e[1;36m"
 
 mkdir -p $logs_folder
 
@@ -31,7 +32,7 @@ timestamp(){
     date "+%F %T"
 }
 
-echo -e "$(timestamp)  [INFO]  ========== ${G}Script Execution started${N} ==========>"| tee -a  $logs_file
+echo -e "$(timestamp)  [INFO]  ========== ${C}Script Execution started${N} ==========>"| tee -a  $logs_file
 
 dnf module disable nodejs -y &>> $logs_file
 validate $? "Disabling nodejs default module " | tee -a  $logs_file
@@ -81,4 +82,4 @@ validate $? "Starting service user " | tee -a  $logs_file
 
 echo "$(timestamp)  [INFO] Time taken  $SECONDS" | tee -a  $logs_file
 
-echo -e "$(timestamp)  [INFO]  ========== ${G}Script Execution Completed${N} ==========>" | tee -a  $logs_file
+echo -e "$(timestamp)  [INFO]  ========== ${C}Script Execution Completed${N} ==========>" | tee -a  $logs_file
