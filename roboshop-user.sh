@@ -82,4 +82,4 @@ validate $? "Starting service user " | tee -a  $logs_file
 
 echo "$(timestamp)  [INFO] Time taken  $SECONDS" | tee -a  $logs_file
 
-echo -e "$(timestamp)  [INFO]  ========== ${C}Script Execution Completed${N} ==========>" | tee -a  $logs_file
+echo -e "$(timestamp)  [INFO]  ${R}========== ${C}Script Execution Completed${R} ==========>${N}" | tee -a  $logs_file
