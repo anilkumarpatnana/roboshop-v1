@@ -46,7 +46,7 @@ validate $? "Installing nodejs " | tee -a  $logs_file
 node -v | tee -a  $logs_file
 validate $? "Checking nodejs version is " | tee -a  $logs_file
 
-if [ $(cat /etc/passwd | grep "roboshop") -eq 0];
+if [ $(cat /etc/passwd | grep "roboshop") -eq 0 ];
 then
     echo "Roboshop User Already Created ....${Y}SKIPPING${N}"
 else
@@ -63,7 +63,7 @@ validate $? "Downloading application code to tmp directory " | tee -a  $logs_fil
 cd /app &>> $logs_file
 validate $? "Moving to app directory " | tee -a  $logs_file
 
-unzip /tmp/catalogue.zip &>> $logs_file
+unzip /tmp/catalogue.zip -y &>> $logs_file
 validate $? "unzipping application code from tmp to app directoy " | tee -a  $logs_file
 
 cd /app
