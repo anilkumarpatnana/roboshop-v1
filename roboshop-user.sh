@@ -36,10 +36,10 @@ echo -e "$(timestamp)  [INFO]  ========== ${G}Script Execution started${N} =====
 dnf module disable nodejs -y &>> $logs_file
 validate $? "Disabling nodejs default module " | tee -a  $logs_file
 
-dnf module enable nodejs:24 -y
+dnf module enable nodejs:24 -y &>> $logs_file
 validate $? "Enabling nodejs:24 module " | tee -a  $logs_file
 
-dnf install nodejs -y
+dnf install nodejs -y &>> $logs_file
 validate $? "Installing nodejs " | tee -a  $logs_file
 
 if grep -q "^roboshop:" /etc/passwd;
@@ -64,7 +64,7 @@ npm install &>> $logs_file
 validate $? "Installing  node dependencies " | tee -a  $logs_file
 
 
-cp user.service /etc/systemd/system/user.service &>> $logs_file
+cp /home/ec2-user/repo/roboshop-v1/user.service /etc/systemd/system/user.service &>> $logs_file
 validate $? "Copying service file to /etc/systemd/system/user.service " | tee -a  $logs_file
 
 
