@@ -65,7 +65,7 @@ validate $? "Installing  node dependencies " | tee -a  $logs_file
 
 
 cp user.service /etc/systemd/system/user.service &>> $logs_file
-validate $? "copying service file to /etc/systemd/system/user.service " | tee -a  $logs_file
+validate $? "Copying service file to /etc/systemd/system/user.service " | tee -a  $logs_file
 
 
 systemctl daemon-reload &>> $logs_file
