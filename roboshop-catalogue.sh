@@ -95,7 +95,7 @@ dnf install mongodb-mongosh -y &>> $logs_file
 validate $? "Installing mongodb-mongosh client for loading data " | tee -a  $logs_file
 
 
-product_count=$(mongosh --host mongodb.roboshop.anilkumarpatnana.online --quiet --eval 'db.getSiblingDB("catalogue").products.countDocuments()')
+product_count=$(mongosh --host mongodb.roboshop.anilkumarpatnana.online --quiet --eval 'db.getSiblingDB("catalogue").products.countDocuments()') &>> $logs_file
 
 if [ "$product_count" -ne 0 ]; then
     echo -e "Products data already added to MongoDB ....${Y}SKIPPING${N}" | tee -a "$logs_file"
