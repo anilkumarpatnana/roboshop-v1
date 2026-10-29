@@ -67,6 +67,8 @@ cd /app
 npm install &>> $logs_file
 validate $? "Installing Dependencies " | tee -a  $logs_file
 
+cd /home/ec2-user/repos/roboshop-v1
+
 cp catalogue.service  /etc/systemd/system/catalogue.service
 validate $? "Copying service file to /etc/systemd/system/catalogue.service  " | tee -a  $logs_file
 
