@@ -88,7 +88,7 @@ validate $? "Enabling catalogue service " | tee -a  $logs_file
 systemctl start catalogue
 validate $? "Starting catalogue service " | tee -a  $logs_file
 
-cp mongo.repo /etc/yum.repos.d/mongo.repo
+cp /home/ec2-user/repo/roboshop-v1/mongo.repo /etc/yum.repos.d/mongo.repo
 validate $? "Copying mongo repo to /etc/yum.repos.d/mongo.repo for installing mongo-client  " | tee -a  $logs_file
 
 
