@@ -101,7 +101,7 @@ product_count=$(mongosh --host mongodb.roboshop.anilkumarpatnana.online --quiet 
 if [ "$product_count" -ne 0 ]; then
     echo -e "Products data already added to MongoDB ....${Y}SKIPPING${N}" | tee -a "$logs_file"
 else
-    mongosh --host mongodb.roboshop.anilkumarpatnana.online < /app/db/master-data.js
+    mongosh --host mongodb.roboshop.anilkumarpatnana.online < /app/db/master-data.js &>> $logs_file
     validate $? "Loading products data to MongoDB" | tee -a "$logs_file"
 fi
 
