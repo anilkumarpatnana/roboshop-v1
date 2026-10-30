@@ -85,15 +85,25 @@ echo "Load Master Data........."
 dnf install mysql -y &>> $logs_file
 validate $? "Installing mysql client package " | tee -a  $logs_file
 
-city_data=$(mysql -u root -pRoboShop@1 -e "SELECT COUNT(*) FROM cities.cities;")
+echo "Checking cities data in MySQL"
 
+city_data=$(mysql -h mysql.roboshop.anilkumarpatnana.online \
+    -uroot -pRoboShop@1 -N -s \
+    -e "SELECT COUNT(*) FROM cities.cities;")
 
-if [ $city_data -gt 0 ];
-then 
- echo "City data already added ....${Ye}SKIPPING${N}"
+if [ $? -ne 0 ]; then
+    echo "Failed to check cities data in MySQL" | tee -a "$logs_file"
+    exit 1
+fi
+
+if [ "$city_data" -gt 0 ]; then
+    echo -e "City data already added ....${Ye}SKIPPING${N}" | tee -a "$logs_file"
 else
-mysql -h mysql.roboshop.anilkumarpatnana.online -uroot -pRoboShop@1 < /app/db/master-data.sql &>> $logs_file
-validate $? "Loading cities data to mysql server " | tee -a  $logs_file
+    mysql -h mysql.roboshop.anilkumarpatnana.online \
+        -uroot -pRoboShop@1 \
+        < /app/db/master-data.sql &>> "$logs_file"
+
+    validate $? "Loading cities data to MySQL server" | tee -a "$logs_file"
 fi
 
 mysql -h mysql.roboshop.anilkumarpatnana.online -uroot -pRoboShop@1 < /app/db/app-user.sql &>> $logs_file
