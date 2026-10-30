@@ -52,8 +52,8 @@ echo $JAVA_HOME
 validate $? "setting JAVA_HOME for maven " | tee -a  $logs_file
 
 
-java -version | tee -a  $logs_file
-mvn -v | tee -a  $logs_file
+java -version &>> $logs_file
+mvn -v &>> $logs_file
 
 if grep -q "^roboshop:" /etc/passwd;
 then
@@ -85,10 +85,16 @@ echo "Load Master Data........."
 dnf install mysql -y &>> $logs_file
 validate $? "Installing mysql client package " | tee -a  $logs_file
 
+city_data=$(mysql -u root -pRoboShop@1 -e "SELECT COUNT(*) FROM cities.cities;")
 
+
+if [ $city_data -gt 0 ];
+then 
+ echo "City data already added ....${Ye}SKIPPING${N}"
+else
 mysql -h mysql.roboshop.anilkumarpatnana.online -uroot -pRoboShop@1 < /app/db/master-data.sql &>> $logs_file
 validate $? "Loading cities data to mysql server " | tee -a  $logs_file
-
+fi
 
 mysql -h mysql.roboshop.anilkumarpatnana.online -uroot -pRoboShop@1 < /app/db/app-user.sql &>> $logs_file
 validate $? "creating shipping user in mysql db for application access " | tee -a  $logs_file
@@ -112,7 +118,7 @@ echo -e "${Y}==========> VERIFICATION${N}"
 systemctl status shipping &>> $logs_file
 validate $? "shipping service is running " | tee -a  $logs_file
 
-curl http://localhost:8080/actuator/actuator/health | tee -a  $logs_file
+curl http://localhost:8080/actuator/health | tee -a  $logs_file
 curl http://localhost:8080/count | tee -a  $logs_file
 
 curl http://localhost:8080/codes &>> $logs_file
