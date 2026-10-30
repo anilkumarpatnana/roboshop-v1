@@ -83,8 +83,7 @@ echo -e "${Y}==========> VERIFICATION${N}"
 systemctl status user &>> $logs_file
 validate $? "user service is running " | tee -a  $logs_file
 
-health_check=$(curl http://localhost:8080/health) | tee -a  $logs_file
-validate $? "http://localhost:8080/health .... is responding " | tee -a  $logs_file
+curl http://localhost:8080/health | tee -a  $logs_file
 
 
 

@@ -83,8 +83,7 @@ echo -e "${Y}==========> VERIFICATION${N}"
 systemctl status cart &>> $logs_file
 validate $? "cart service is running " | tee -a  $logs_file
 
-health_check=$(curl http://localhost:8080/health) | tee -a  $logs_file
-validate $? "http://localhost:8080/health .... is responding " | tee -a  $logs_file
+curl http://localhost:8080/health | tee -a  $logs_file
 
 
 
