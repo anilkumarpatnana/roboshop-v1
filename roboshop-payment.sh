@@ -64,7 +64,7 @@ python3.14 -m venv /app/.venv
 validate $? "Creating virtual environment  " | tee -a  $logs_file
 
 
-/app/.venv/bin/pip install -r requirements.txt
+/app/.venv/bin/pip install -r requirements.txt  &>> $logs_file
 validate $? "Installing dependencies " | tee -a  $logs_file
 
 
