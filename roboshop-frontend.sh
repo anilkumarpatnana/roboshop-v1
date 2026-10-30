@@ -55,7 +55,7 @@ validate $? "Removing default files from nginx home path " | tee -a  $logs_file
 curl -L -o /tmp/frontend.zip https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/frontend-v4.zip &>> $logs_file
 validate $? "Downloading frontend files to /tmp " | tee -a  $logs_file
 
-unzip -o /tmp/frontend.zip -d /usr/share/nginx/html
+unzip -o /tmp/frontend.zip -d /usr/share/nginx/html &>> $logs_file
 validate $? "Unzipping files from /tmp to /usr/share/nginx/html " | tee -a  $logs_file
 
 cp /home/ec2-user/repo/roboshop-v1/roboshop.conf  /etc/nginx/default.d/roboshop.conf &>> $logs_file
