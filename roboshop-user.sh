@@ -78,6 +78,14 @@ validate $? "Enabling service user " | tee -a  $logs_file
 systemctl start user &>> $logs_file
 validate $? "Starting service user " | tee -a  $logs_file
 
+echo -e "${Y}==========> VERIFICATION${N}"
+
+systemctl status user &>> $logs_file
+validate $? "user service is running " | tee -a  $logs_file
+
+health_check=$(curl http://localhost:8080/health) | tee -a  $logs_file
+validate $? "http://localhost:8080/health .... is responding " | tee -a  $logs_file
+
 
 
 echo "$(timestamp)  [INFO] Time taken  $SECONDS" | tee -a  $logs_file
