@@ -43,7 +43,13 @@ validate $? "Installing maven java-25-openjdk-devel " | tee -a  $logs_file
 
 
 alternatives --set java /usr/lib/jvm/java-25-openjdk/bin/java &>> $logs_file
-validate $? "setting up java-25  /usr/lib/jvm/java-25-openjdk/bin/java  " | tee -a  $logs_file
+validate $? "setting up java-25 as default " | tee -a  $logs_file
+
+
+echo "export JAVA_HOME=$(dirname $(dirname $(readlink -f /usr/bin/java)))" > /etc/profile.d/java.sh
+source /etc/profile.d/java.sh
+echo $JAVA_HOME
+validate $? "setting JAVA_HOME for maven " | tee -a  $logs_file
 
 
 java -version | tee -a  $logs_file
@@ -61,9 +67,8 @@ mkdir -p /app &>> $logs_file
 curl -L -o /tmp/shipping.zip https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/shipping-v4.zip
 
 
-unzip -o /tmp/shipping.zip -d /app &>> $logs_file 
-validate $? "Unzipping applications files to /tmp " | tee -a  $logs_file
-
+unzip -o /tmp/shipping.zip -d /app &>> "$logs_file"
+validate $? "Unzipping application files to /app" | tee -a "$logs_file"
 
 cd /app
 
