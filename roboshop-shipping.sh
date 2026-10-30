@@ -36,9 +36,86 @@ echo -e "$(timestamp)  [INFO]  ${R}========== ${C}Script Execution Started${R} =
  
 
 dnf module enable maven:3.9 -y &>> $logs_file
-validate $? "user service is running " | tee -a  $logs_file
+validate $? "Enabling maven:3.9  " | tee -a  $logs_file
 
 dnf install maven java-25-openjdk-devel -y &>> $logs_file
+validate $? "Installing maven java-25-openjdk-devel " | tee -a  $logs_file
 
-alternatives --set java 
+
+alternatives --set java /usr/lib/jvm/java-25-openjdk/bin/java &>> $logs_file
+validate $? "setting up java-25  /usr/lib/jvm/java-25-openjdk/bin/java  " | tee -a  $logs_file
+
+
+java -version | tee -a  $logs_file
+mvn -v | tee -a  $logs_file
+
+if grep -q "^roboshop:" /etc/passwd;
+then
+ echo -e "roboshop user already created ....${Y}SKIPPING${N}"
+else
+useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
+validate $? "Creating user roboshop " | tee -a  $logs_file
+fi
+
+mkdir -p /app &>> $logs_file
+curl -L -o /tmp/shipping.zip https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/shipping-v4.zip
+
+
+unzip -o /tmp/shipping.zip -d /app &>> $logs_file 
+validate $? "Unzipping applications files to /tmp " | tee -a  $logs_file
+
+
+cd /app
+
+mvn clean package &>> $logs_file
+validate $? "Running mvn clean package is " | tee -a  $logs_file
+
+mv target/shipping.jar shipping.jar &>> $logs_file
+validate $? "Running mvn clean package is " | tee -a  $logs_file
+
+
+
+echo "Load Master Data........."
+
+dnf install mysql -y &>> $logs_file
+validate $? "Installing mysql client package " | tee -a  $logs_file
+
+
+mysql -h mysql.roboshop.anilkumarpatnana.online -uroot -pRoboShop@1 < /app/db/master-data.sql &>> $logs_file
+validate $? "Loading cities data to mysql server " | tee -a  $logs_file
+
+
+mysql -h mysql.roboshop.anilkumarpatnana.online -uroot -pRoboShop@1 < /app/db/app-user.sql &>> $logs_file
+validate $? "creating shipping user in mysql db for application access " | tee -a  $logs_file
+
+
+cp /home/ec2-user/repo/roboshop-v1/shipping.service /etc/systemd/system/shipping.service
+
+systemctl daemon-reload &>> $logs_file
+validate $? "Reloading the daemon service systemd " | tee -a  $logs_file
+
+systemctl enable shipping &>> $logs_file
+validate $? "Enabling shipping service  " | tee -a  $logs_file
+
+
+systemctl start shipping &>> $logs_file
+validate $? "Starting shipping service " | tee -a  $logs_file
+
+
+echo -e "${Y}==========> VERIFICATION${N}"
+
+systemctl status shipping &>> $logs_file
+validate $? "shipping service is running " | tee -a  $logs_file
+
+curl http://localhost:8080/actuator/actuator/health | tee -a  $logs_file
+curl http://localhost:8080/count | tee -a  $logs_file
+
+curl http://localhost:8080/codes &>> $logs_file
+validate $? "able to access city codes " | tee -a  $logs_file
+
+
+
+echo "$(timestamp)  [INFO] Time taken  $SECONDS" | tee -a  $logs_file
+
+echo -e "$(timestamp)  [INFO]  ${R}========== ${C}Script Execution Completed${R} ==========>${N}" | tee -a  $logs_file
 
