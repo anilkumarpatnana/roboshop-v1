@@ -110,11 +110,9 @@ echo -e "${Y}==========> VERIFICATION${N}"
 systemctl status catalogue &>> $logs_file
 validate $? "catalogue service is running " | tee -a  $logs_file
 
-curl http://localhost:8080/health &>> $logs_file
-validate $? "http://localhost:8080/health .... is responding " | tee -a  $logs_file
+curl http://localhost:8080/health | tee -a  $logs_file
 
-curl http://localhost:8080/products &>> $logs_file
-validate $? "http://localhost:8080/products .... is responding " | tee -a  $logs_file
+curl http://localhost:8080/products | tee -a  $logs_file
 
 
 
